@@ -8,8 +8,8 @@ export default function dev(store, config) {
     spy(store, config);
   } else if (typeof store === 'function') {
     store = class extends store {
-      constructor() {
-        super();
+      constructor(...args) {
+        super(...args);
         spy(this, config);
       }
     };
