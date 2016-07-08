@@ -51,6 +51,7 @@
     "mobx": "^2.3.3",
     "mobx-react": "^3.0.0",
     "mobx-react-devtools": "^4.0.5",
+    "mobx-remotedev": "^0.0.1",
     "react": "^0.14.6",
     "react-dom": "^0.14.0",
     "todomvc-app-css": "^2.0.1",

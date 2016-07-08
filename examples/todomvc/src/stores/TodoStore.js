@@ -1,4 +1,5 @@
 import {observable, computed, action, autorun} from 'mobx';
+import remotedev from 'mobx-remotedev';
 import TodoModel from '../models/TodoModel'
 import * as Utils from '../utils';
 
@@ -18,6 +19,7 @@ class TodoStore {
 
 	subscribeServerToStore(model) {
 		autorun(() => {
+			if (this.__isRemotedevAction) return;
 			const todos = this.toJS();
 			if (this.subscribedServerToModel !== true) {
 				this.subscribedServerToModel = true;
@@ -62,4 +64,4 @@ class TodoStore {
 	}
 }
 
-export default TodoStore;
+export default remotedev(TodoStore, { name: 'TodoStore' });
