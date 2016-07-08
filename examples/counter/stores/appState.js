@@ -1,5 +1,5 @@
 import { observable, action, extras } from 'mobx';
-import remotedev from 'mobx-remotedev';
+import remotedev from '../../../src'; // import remotedev from 'mobx-remotedev';
 
 const appState = observable({
   count: 0
