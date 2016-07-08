@@ -2,9 +2,9 @@ import mobx from 'mobx';
 import { createAction, getName } from './utils';
 import { dispatchMonitorAction } from './monitorActions';
 
-let devTools;
 let isSpyEnabled = false;
 const stores = {};
+const monitors = {};
 const scheduled = {};
 
 function init(store, config) {
@@ -12,15 +12,16 @@ function init(store, config) {
   stores[name] = store;
   scheduled[name] = [];
 
-  devTools = window.devToolsExtension.connect({ ...config, shouldStringify: true });
+  const devTools = window.devToolsExtension.connect({ ...config, shouldStringify: true });
   devTools.init(mobx.toJS(store));
   devTools.subscribe(dispatchMonitorAction(store));
+  monitors[name] = devTools;
 }
 
 function schedule(name, action) {
   if (!scheduled[name] || stores[name].__isRemotedevAction) return;
   scheduled[name].push(() => {
-    devTools.send(action, mobx.toJS(stores[name]));
+    monitors[name].send(action, mobx.toJS(stores[name]));
   });
 }
 
