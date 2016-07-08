@@ -19,6 +19,7 @@
   "dependencies": {
     "mobx": "^2.3.3",
     "mobx-react": "^3.4.0",
+    "mobx-remotedev": "^0.0.1",
     "react": "^15.2.0",
     "react-dom": "^15.2.0"
   },
