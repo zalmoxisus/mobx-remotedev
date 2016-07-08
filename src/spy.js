@@ -1,5 +1,6 @@
 import mobx from 'mobx';
 import { createAction, getName } from './utils';
+import { dispatchMonitorAction } from './monitorActions';
 
 let devTools;
 let isSpyEnabled = false;
@@ -13,10 +14,11 @@ function init(store, config) {
 
   devTools = window.devToolsExtension.connect({ ...config, shouldStringify: true });
   devTools.init(mobx.toJS(store));
+  devTools.subscribe(dispatchMonitorAction(store));
 }
 
 function schedule(name, action) {
-  if (!scheduled[name]) return;
+  if (!scheduled[name] || stores[name].__isRemotedevAction) return;
   scheduled[name].push(() => {
     devTools.send(action, mobx.toJS(stores[name]));
   });
