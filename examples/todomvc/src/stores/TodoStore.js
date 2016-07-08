@@ -51,10 +51,14 @@ class TodoStore {
 	toJS() {
 		return this.todos.map(todo => todo.toJS());
 	}
+	
+	importState(state) {
+		this.todos = state.todos.map(item => TodoModel.fromJS(this, item));
+	}
 
-	static fromJS(array) {
-		const todoStore = new TodoStore();
-		todoStore.todos = array.map(item => TodoModel.fromJS(todoStore, item));
+	static fromJS(todos) {
+		const todoStore = new this();
+		todoStore.importState({ todos });
 		return todoStore;
 	}
 }

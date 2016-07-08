@@ -13,3 +13,13 @@ export function getName(obj) {
   if (end === -1) end = undefined;
   return r.substr(0, end);
 }
+
+export function setValue(store, state) {
+  if(store.importState) {
+    store.importState(state);
+  } else {
+    Object.keys(state).forEach((key) => {
+      store[key] = state[key]; // eslint-disable-line no-param-reassign
+    });
+  }
+}

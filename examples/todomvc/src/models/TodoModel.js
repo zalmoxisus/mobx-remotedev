@@ -8,9 +8,13 @@ class TodoModel {
 
 	constructor(store, id, title, completed) {
 		this.store = store;
-		this.id = id;
-		this.title = title;
-		this.completed = completed;
+		this.importState({ id, title, completed });
+	}
+
+	importState(state) {
+		this.id = state.id;
+		this.title = state.title;
+		this.completed = state.completed;
 	}
 
 	toggle() {
@@ -34,7 +38,7 @@ class TodoModel {
 	}
 
 	static fromJS(store, object) {
-		return new TodoModel(store, object.id, object.title, object.completed);
+		return new this(store, object.id, object.title, object.completed);
 	}
 }
 

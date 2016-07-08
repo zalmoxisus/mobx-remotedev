@@ -1,4 +1,5 @@
 import { parse } from 'jsan';
+import { setValue } from './utils';
 
 export const isMonitorAction = (store) => store.__isRemotedevAction === true;
 
@@ -6,11 +7,8 @@ export const dispatchMonitorAction = (store) => {
   return (message) => {
     if (message.type === 'DISPATCH') {
       if (message.payload.type === 'JUMP_TO_STATE') {
-        const state = parse(message.state);
         store.__isRemotedevAction = true;
-        Object.keys(state).forEach((key) => {
-          store[key] = state[key]; // eslint-disable-line no-param-reassign
-        });
+        setValue(store, parse(message.state));
         store.__isRemotedevAction = false;
       }
     }
