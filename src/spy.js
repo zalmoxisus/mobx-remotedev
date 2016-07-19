@@ -12,7 +12,7 @@ function init(store, config) {
   stores[name] = store;
   scheduled[name] = [];
 
-  const devTools = window.devToolsExtension.connect({ ...config, shouldStringify: true });
+  const devTools = window.devToolsExtension.connect(config);
   devTools.init(mobx.toJS(store));
   devTools.subscribe(dispatchMonitorAction(store));
   monitors[name] = devTools;
