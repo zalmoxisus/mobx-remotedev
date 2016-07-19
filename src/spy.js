@@ -28,7 +28,7 @@ function schedule(name, action) {
 function send(name) {
   const toSend = scheduled[name];
   if (!toSend) return;
-  while(toSend.length) {
+  while (toSend.length) {
     toSend.shift()();
   }
 }
@@ -55,4 +55,4 @@ export default function spy(store, config) {
       send(objName);
     }
   });
-};
+}

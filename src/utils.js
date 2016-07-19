@@ -15,7 +15,7 @@ export function getName(obj) {
 }
 
 export function setValue(store, state) {
-  if(store.importState) {
+  if (store.importState) {
     store.importState(state);
   } else {
     Object.keys(state).forEach((key) => {

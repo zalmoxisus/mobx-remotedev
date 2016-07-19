@@ -7,7 +7,7 @@ export default function dev(store, config) {
   if (mobx.isObservable(store)) {
     spy(store, config);
   } else if (typeof store === 'function') {
-    store = class extends store {
+    store = class extends store {  // eslint-disable-line no-param-reassign
       constructor(...args) {
         super(...args);
         spy(this, config);
@@ -16,6 +16,6 @@ export default function dev(store, config) {
   } else {
     console.warn(`Passed ${typeof store} to mobx-remotedev, which is not an observable.`);
   }
-  
+
   return store;
 }
