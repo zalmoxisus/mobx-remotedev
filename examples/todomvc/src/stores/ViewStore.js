@@ -1,6 +1,6 @@
 import {observable} from 'mobx';
 import { ALL_TODOS } from '../constants';
-import remotedev from '../../../../src'; // import remotedev from 'mobx-remotedev';
+import remotedev from '../../../../src/dev'; // import remotedev from 'mobx-remotedev/lib/dev';
 
 class ViewStore {
 	@observable todoBeingEdited = null;

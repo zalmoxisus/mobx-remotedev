@@ -1,5 +1,5 @@
 import {observable, computed, action, autorun} from 'mobx';
-import remotedev from '../../../../src'; // import remotedev from 'mobx-remotedev';
+import remotedev from '../../../../src/dev'; // import remotedev from 'mobx-remotedev/lib/dev';
 import TodoModel from '../models/TodoModel'
 import * as Utils from '../utils';
 
