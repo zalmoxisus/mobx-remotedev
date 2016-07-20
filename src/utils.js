@@ -14,7 +14,7 @@ export function getName(obj) {
   return r.substr(0, end);
 }
 
-export function setValue(store, state) {
+export const setValue = mobx.action(function setValue(store, state) {
   if (store.importState) {
     store.importState(state);
   } else {
@@ -22,4 +22,4 @@ export function setValue(store, state) {
       store[key] = state[key]; // eslint-disable-line no-param-reassign
     });
   }
-}
+});
