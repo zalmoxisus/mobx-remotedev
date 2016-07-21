@@ -19,7 +19,6 @@ function init(store, config) {
 }
 
 function schedule(name, action) {
-  if (!scheduled[name] || stores[name].__isRemotedevAction) return;
   scheduled[name].push(() => {
     monitors[name].send(action, mobx.toJS(stores[name]));
   });
@@ -43,13 +42,13 @@ export default function spy(store, config) {
     if (change.spyReportStart) {
       if (change.type === 'reaction') return; // TODO: show reactions
       objName = getName(change.object || change.target);
+      if (!scheduled[objName] || stores[objName].__isRemotedevAction) return;
       if (change.type === 'action') {
-        if (change.target !== store) return;
         const action = createAction(change.name);
         if (change.arguments && change.arguments.length) action.arguments = change.arguments;
         schedule(objName, action);
       } else if (change.type && mobx.isObservable(change.object)) {
-        schedule(objName, createAction(change.type, true));
+        schedule(objName, createAction(change.type, change));
       }
     } else if (change.spyReportEnd) {
       send(objName);

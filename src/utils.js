@@ -1,9 +1,30 @@
 import mobx from 'mobx';
 
-export function createAction(name, isNative) {
+const getPayload = (change) => {
+  const { added, addedCount, index, removed, removedCount, object } = change;
   return {
-    type: isNative ? `@@${name}` : name
+    index,
+    added: added && mobx.toJS(added),
+    addedCount,
+    removed: removed && mobx.toJS(removed),
+    removedCount
   };
+};
+
+export function createAction(name, change) {
+  if (!change) { // is action
+    return { type: name };
+  }
+
+  let action;
+  if (typeof change.newValue !== 'undefined') {
+    action = { [change.name]: mobx.toJS(change.newValue) };
+  } else {
+    action = getPayload(change);
+  }
+  action.type = `@@${name}`;
+
+  return action;
 }
 
 export function getName(obj) {
