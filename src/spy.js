@@ -5,12 +5,11 @@ import { dispatchMonitorAction } from './monitorActions';
 let isSpyEnabled = false;
 const stores = {};
 const monitors = {};
-const scheduled = {};
+const scheduled = [];
 
 function init(store, config) {
   const name = mobx.extras.getDebugName(store);
   stores[name] = store;
-  scheduled[name] = [];
 
   const devTools = window.devToolsExtension.connect(config);
   devTools.init(mobx.toJS(store));
@@ -19,16 +18,14 @@ function init(store, config) {
 }
 
 function schedule(name, action) {
-  scheduled[name].push(() => {
+  scheduled.push(() => {
     monitors[name].send(action, mobx.toJS(stores[name]));
   });
 }
 
-function send(name) {
-  const toSend = scheduled[name];
-  if (!toSend) return;
-  while (toSend.length) {
-    toSend.shift()();
+function send() {
+  if (scheduled.length) {
+    scheduled.pop()();
   }
 }
 
@@ -42,7 +39,7 @@ export default function spy(store, config) {
     if (change.spyReportStart) {
       if (change.type === 'reaction') return; // TODO: show reactions
       objName = getName(change.object || change.target);
-      if (!scheduled[objName] || stores[objName].__isRemotedevAction) return;
+      if (!stores[objName] || stores[objName].__isRemotedevAction) return;
       if (change.type === 'action') {
         const action = createAction(change.name);
         if (change.arguments && change.arguments.length) action.arguments = change.arguments;
@@ -50,8 +47,8 @@ export default function spy(store, config) {
       } else if (change.type && mobx.isObservable(change.object)) {
         schedule(objName, createAction(change.type, change));
       }
-    } else if (change.spyReportEnd) {
-      send(objName);
+    } else if (change.spyReportEnd && stores[objName]) {
+      send();
     }
   });
 }
