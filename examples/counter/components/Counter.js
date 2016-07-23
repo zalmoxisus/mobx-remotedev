@@ -8,7 +8,11 @@ import { observer } from 'mobx-react';
   };
 
   handleDec = () => {
-    this.props.store.decrement()
+    this.props.store.decrement(); 
+  };
+
+  handleIncAsync = () => {
+    this.props.store.incrementAsync();
   };
 
   render() {
@@ -17,6 +21,7 @@ import { observer } from 'mobx-react';
         Counter: {this.props.store.count} {'  '}
         <button onClick={this.handleInc}> + </button>
         <button onClick={this.handleDec}> - </button>
+        <button onClick={this.handleIncAsync}> Increment async </button>
       </div>
     );
   }
