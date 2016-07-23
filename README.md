@@ -72,6 +72,24 @@ import remotedev from 'mobx-remotedev/lib/dev';
 ```
 So, the code will not be stripped from production bundle and you can use the extension even in production. It wouldn't affect the performance for end-users who don't have the extension installed. 
 
+## FAQ
+
+### How to monitor (show changes) for inner items
+
+Use `remotedev` function for them as well. [Example](https://github.com/zalmoxisus/mobx-remotedev/blob/master/examples/simple-todo/index.js#L22) 
+
+### How to set data correctly when time traveling
+
+By default it will try to set the properties of the class or observable object, but, if you have an `importState` method, it will be used. [Example](https://github.com/zalmoxisus/mobx-remotedev/blob/master/examples/todomvc/src/stores/TodoStore.js#L56)
+
+### How to disable computations when time traveling
+
+Check `__isRemotedevAction` of your class or observable object, which will be set to true when it's a monitor action. [Example](https://github.com/zalmoxisus/mobx-remotedev/blob/master/examples/todomvc/src/stores/TodoStore.js#L22)  
+
+### How to handle async actions
+
+Use `runInAction` and don't forget about the second / third parameter which will be `this` if you're using arrow functions. [Example](https://github.com/zalmoxisus/mobx-remotedev/blob/master/examples/counter/stores/appState.js#L14)  
+
 ## LICENSE
 
 [MIT](LICENSE)
