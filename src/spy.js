@@ -1,16 +1,24 @@
 import mobx from 'mobx';
 import { createAction, getName } from './utils';
+import { isFiltered } from './filters';
 import { dispatchMonitorAction } from './monitorActions';
 
 let isSpyEnabled = false;
 const stores = {};
 const onlyActions = {};
+const filters = {};
 const monitors = {};
 const scheduled = [];
 
+function configure(name, config) {
+  if (!config) return;
+  onlyActions[name] = config.onlyActions;
+  filters[name] = config.filters;
+}
+
 function init(store, config) {
   const name = mobx.extras.getDebugName(store);
-  if (config && config.onlyActions) onlyActions[name] = true;
+  configure(name, config);
   stores[name] = store;
 
   const devTools = window.devToolsExtension.connect(config);
@@ -20,9 +28,11 @@ function init(store, config) {
 }
 
 function schedule(name, action, isAction) {
-  scheduled.push(!isAction && onlyActions[name] ? null :
-    () => { monitors[name].send(action, mobx.toJS(stores[name])); }
-  );
+  let toSend;
+  if (isAction && !isFiltered(action, filters[name]) || !onlyActions[name]) {
+    toSend = () => { monitors[name].send(action, mobx.toJS(stores[name])); };
+  }
+  scheduled.push(toSend);
 }
 
 function send() {

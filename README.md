@@ -55,6 +55,9 @@ See [counter](https://github.com/zalmoxisus/mobx-remotedev/blob/master/examples/
       - **name** *string* - the instance name to be showed on the monitor page. Default value is document.title.
       - **onlyActions** *boolean* - set it to `true` to have a clear log only with actions. Usually you want to use it in strict mode. And don't forget about [async actions](https://github.com/zalmoxisus/mobx-remotedev#how-to-handle-async-actions).
       - **shouldStringify** *boolean* - set it to `true` when having circular references or special types like ImmutableJS. By default is `false`.
+      - **filters** *object* - map of arrays named `whitelist` or `blacklist` to filter action types. You can also set it globally in the extension settings.
+        - **blacklist** *array of (regex as string)* - actions to be hidden in DevTools.
+        - **whitelist** *array of (regex as string)* - all other actions will be hidden in DevTools (the `blacklist` parameter will be ignored).
 
 Also see [the extension API](https://github.com/zalmoxisus/redux-devtools-extension#documentation) and [my presentation at React Europe](https://youtu.be/YU8jQ2HtqH4).
 
