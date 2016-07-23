@@ -53,6 +53,7 @@ See [counter](https://github.com/zalmoxisus/mobx-remotedev/blob/master/examples/
     - **store** *observable or class* to be monitored. In case you want to change its values (to time travel or cancel actions), you should export its result as in the example above (so we can extend the class). 
     - **config** *object* (optional as the parameters bellow)
       - **name** *string* - the instance name to be showed on the monitor page. Default value is document.title.
+      - **onlyActions** *boolean* - set it to `true` to have a clear log only with actions. Usually you want to use it in strict mode. And don't forget about [async actions](https://github.com/zalmoxisus/mobx-remotedev#how-to-handle-async-actions).
       - **shouldStringify** *boolean* - set it to `true` when having circular references or special types like ImmutableJS. By default is `false`.
 
 Also see [the extension API](https://github.com/zalmoxisus/redux-devtools-extension#documentation) and [my presentation at React Europe](https://youtu.be/YU8jQ2HtqH4).

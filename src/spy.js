@@ -4,11 +4,13 @@ import { dispatchMonitorAction } from './monitorActions';
 
 let isSpyEnabled = false;
 const stores = {};
+const onlyActions = {};
 const monitors = {};
 const scheduled = [];
 
 function init(store, config) {
   const name = mobx.extras.getDebugName(store);
+  if (config && config.onlyActions) onlyActions[name] = true;
   stores[name] = store;
 
   const devTools = window.devToolsExtension.connect(config);
@@ -17,15 +19,16 @@ function init(store, config) {
   monitors[name] = devTools;
 }
 
-function schedule(name, action) {
-  scheduled.push(() => {
-    monitors[name].send(action, mobx.toJS(stores[name]));
-  });
+function schedule(name, action, isAction) {
+  scheduled.push(!isAction && onlyActions[name] ? null :
+    () => { monitors[name].send(action, mobx.toJS(stores[name])); }
+  );
 }
 
 function send() {
   if (scheduled.length) {
-    scheduled.pop()();
+    const toSend = scheduled.pop();
+    if (toSend) toSend();
   }
 }
 
@@ -43,7 +46,7 @@ export default function spy(store, config) {
       if (change.type === 'action') {
         const action = createAction(change.name);
         if (change.arguments && change.arguments.length) action.arguments = change.arguments;
-        schedule(objName, action);
+        schedule(objName, action, true);
       } else if (change.type && mobx.isObservable(change.object)) {
         schedule(objName, createAction(change.type, change));
       }
