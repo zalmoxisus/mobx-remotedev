@@ -27,9 +27,9 @@ function init(store, config) {
   monitors[name] = devTools;
 }
 
-function schedule(name, action, isAction) {
+function schedule(name, action) {
   let toSend;
-  if (isAction && !isFiltered(action, filters[name]) || !onlyActions[name]) {
+  if (action && !isFiltered(action, filters[name])) {
     toSend = () => { monitors[name].send(action, mobx.toJS(stores[name])); };
   }
   scheduled.push(toSend);
@@ -56,9 +56,9 @@ export default function spy(store, config) {
       if (change.type === 'action') {
         const action = createAction(change.name);
         if (change.arguments && change.arguments.length) action.arguments = change.arguments;
-        schedule(objName, action, true);
+        schedule(objName, action);
       } else if (change.type && mobx.isObservable(change.object)) {
-        schedule(objName, createAction(change.type, change));
+        schedule(objName, !onlyActions[objName] && createAction(change.type, change));
       }
     } else if (change.spyReportEnd && stores[objName]) {
       send();
