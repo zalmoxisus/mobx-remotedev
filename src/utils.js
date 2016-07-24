@@ -1,7 +1,7 @@
 import mobx from 'mobx';
 
 const getPayload = (change) => {
-  const { added, addedCount, index, removed, removedCount, object } = change;
+  const { added, addedCount, index, removed, removedCount } = change;
   return {
     index,
     added: added && mobx.toJS(added),
@@ -22,7 +22,7 @@ export function createAction(name, change) {
   } else {
     action = getPayload(change);
   }
-  action.type = `@@${name}`;
+  action.type = `┃ ${name}`;
 
   return action;
 }

@@ -56,7 +56,13 @@ export default function spy(store, config) {
       if (change.type === 'action') {
         const action = createAction(change.name);
         if (change.arguments && change.arguments.length) action.arguments = change.arguments;
-        schedule(objName, action);
+        if (!onlyActions[objName]) {
+          schedule(objName, { ...action, type: `┏ ${action.type}` });
+          send();
+          schedule(objName, { ...action, type: `┗ ${action.type}` });
+        } else {
+          schedule(objName, action);
+        }
       } else if (change.type && mobx.isObservable(change.object)) {
         schedule(objName, !onlyActions[objName] && createAction(change.type, change));
       }
