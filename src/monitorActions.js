@@ -1,16 +1,24 @@
-import { parse } from 'jsan';
+import mobx from 'mobx';
+import { stringify, parse } from 'jsan';
 import { setValue } from './utils';
 
 export const isMonitorAction = (store) => store.__isRemotedevAction === true;
 
-/* eslint-disable no-param-reassign */
-export const dispatchMonitorAction = (store) => (message) => {
-  if (message.type === 'DISPATCH') {
-    if (message.payload.type === 'JUMP_TO_STATE') {
-      store.__isRemotedevAction = true;
-      setValue(store, parse(message.state));
-      store.__isRemotedevAction = false;
+export const dispatchMonitorAction = (store, devTools) => {
+  const initValue = mobx.toJS(store);
+  devTools.init(initValue);
+
+  return (message) => {
+    if (message.type === 'DISPATCH') {
+      switch (message.payload.type) {
+        case 'RESET':
+          setValue(store, initValue);
+          devTools.init(initValue);
+          return;
+        case 'JUMP_TO_STATE':
+          setValue(store, parse(message.state));
+          return;
+      }
     }
-  }
+  };
 };
-/* eslint-enable */

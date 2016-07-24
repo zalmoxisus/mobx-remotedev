@@ -22,8 +22,7 @@ function init(store, config) {
   stores[name] = store;
 
   const devTools = window.devToolsExtension.connect(config);
-  devTools.init(mobx.toJS(store));
-  devTools.subscribe(dispatchMonitorAction(store));
+  devTools.subscribe(dispatchMonitorAction(store, devTools));
   monitors[name] = devTools;
 }
 

@@ -35,12 +35,16 @@ export function getName(obj) {
   return r.substr(0, end);
 }
 
+/* eslint-disable no-param-reassign */
 export const setValue = mobx.action(function setValue(store, state) {
+  store.__isRemotedevAction = true;
   if (store.importState) {
     store.importState(state);
   } else {
     Object.keys(state).forEach((key) => {
-      store[key] = state[key]; // eslint-disable-line no-param-reassign
+      store[key] = state[key];
     });
   }
+  delete store.__isRemotedevAction;
 });
+/* eslint-enable */
