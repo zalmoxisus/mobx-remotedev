@@ -36,7 +36,7 @@ export function getName(obj) {
 }
 
 /* eslint-disable no-param-reassign */
-export const setValue = mobx.action(function setValue(store, state) {
+function setValueAction(store, state) {
   store.__isRemotedevAction = true;
   if (store.importState) {
     store.importState(state);
@@ -46,5 +46,7 @@ export const setValue = mobx.action(function setValue(store, state) {
     });
   }
   delete store.__isRemotedevAction;
-});
+}
+setValueAction.__isRemotedevAction = true;
+export const setValue = mobx.action(setValueAction);
 /* eslint-enable */

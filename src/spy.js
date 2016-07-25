@@ -9,6 +9,7 @@ const onlyActions = {};
 const filters = {};
 const monitors = {};
 const scheduled = [];
+const remotedevId = '__Remotedev';
 
 function configure(name, config) {
   if (!config) return;
@@ -26,47 +27,44 @@ function init(store, config) {
   monitors[name] = devTools;
 }
 
-function schedule(name, action) {
-  let toSend;
-  if (action && !isFiltered(action, filters[name])) {
-    toSend = () => { monitors[name].send(action, mobx.toJS(stores[name])); };
+function schedule(action) {
+  function toSend(name) {
+    if (!action || isFiltered(action, filters[name])) return;
+    monitors[name].send(action, mobx.toJS(stores[name]));
   }
   scheduled.push(toSend);
 }
 
-function send() {
-  if (scheduled.length) {
-    const toSend = scheduled.pop();
-    if (toSend) toSend();
+function send(name) {
+  while (scheduled.length) {
+    let toSend = scheduled.shift();
+    toSend(name);
   }
 }
 
 export default function spy(store, config) {
   init(store, config);
+  mobx.reaction(getName(store)+remotedevId, () => mobx.toJS(store), () => {});
   if (isSpyEnabled) return;
   isSpyEnabled = true;
   let objName;
 
   mobx.spy((change) => {
-    if (change.spyReportStart) {
-      if (change.type === 'reaction') return; // TODO: show reactions
-      objName = getName(change.object || change.target);
-      if (!stores[objName] || stores[objName].__isRemotedevAction) return;
-      if (change.type === 'action') {
-        const action = createAction(change.name);
-        if (change.arguments && change.arguments.length) action.arguments = change.arguments;
-        if (!onlyActions[objName]) {
-          schedule(objName, { ...action, type: `┏ ${action.type}` });
-          send();
-          schedule(objName, { ...action, type: `┗ ${action.type}` });
-        } else {
-          schedule(objName, action);
-        }
-      } else if (change.type && mobx.isObservable(change.object)) {
-        schedule(objName, !onlyActions[objName] && createAction(change.type, change));
-      }
-    } else if (change.spyReportEnd && stores[objName]) {
-      send();
+    if (!change.spyReportStart) return;
+    objName = getName(change.object || change.target);
+    if (stores[objName] && stores[objName].__isRemotedevAction) return;
+    if (change.fn && change.fn.__isRemotedevAction) return;
+    if (change.type === 'reaction') {
+      objName = objName.replace(remotedevId, '');
+      if (stores[objName]) send(objName);
+      return; // TODO: show reactions
+    }
+    if (change.type === 'action') {
+      const action = createAction(change.name);
+      if (change.arguments && change.arguments.length) action.arguments = change.arguments;
+      schedule(action);
+    } else if (change.type && mobx.isObservable(change.object)) {
+      schedule(!onlyActions[objName] && createAction(change.type, change));
     }
   });
 }
