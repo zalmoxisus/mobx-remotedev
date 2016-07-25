@@ -46,5 +46,6 @@ export const setValue = mobx.action(function setValue(store, state) {
     });
   }
   delete store.__isRemotedevAction;
+  return state;
 });
 /* eslint-enable */

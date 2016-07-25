@@ -13,7 +13,6 @@ function dispatchRemotely(store, { type, arguments: args }) {
 }
 
 export const dispatchMonitorAction = (store, devTools) => {
-  let intermValue;
   const initValue = mobx.toJS(store);
   devTools.init(initValue);
 
@@ -21,16 +20,13 @@ export const dispatchMonitorAction = (store, devTools) => {
     if (message.type === 'DISPATCH') {
       switch (message.payload.type) {
         case 'RESET':
-          setValue(store, initValue);
-          devTools.init(initValue);
+          devTools.init(setValue(store, initValue));
           return;
         case 'COMMIT':
-          intermValue = mobx.toJS(store);
-          devTools.init(intermValue);
+          devTools.init(mobx.toJS(store));
           return;
         case 'ROLLBACK':
-          setValue(store, intermValue);
-          devTools.init(intermValue);
+          devTools.init(setValue(store, parse(message.state)));
           return;
         case 'JUMP_TO_STATE':
           setValue(store, parse(message.state));
