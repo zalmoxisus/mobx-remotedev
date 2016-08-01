@@ -1,15 +1,22 @@
 import mobx from 'mobx';
 import { stringify, parse } from 'jsan';
+import { getMethods, evalMethod } from 'remotedev-utils';
 import { silently, setValue } from './utils';
 
 export const isMonitorAction = (store) => store.__isRemotedevAction === true;
 
-function dispatchRemotely(store, { type, arguments: args }) {
-  if (!store[type]) {
-    console.error(`Function '${type}' doesn't exist`);
-    return;
+function dispatch(store, { type, arguments: args }) {
+  if (typeof store[type] === 'function') {
+    silently(() => { store[type](...args); }, store);
   }
-  store[type](...args);
+}
+
+function dispatchRemotely(devTools, store, payload) {
+  try {
+    evalMethod(payload, store);
+  } catch (e) {
+    devTools.error(e.message);
+  }
 }
 
 function toggleAction(store, id, strState) {
@@ -24,9 +31,7 @@ function toggleAction(store, id, strState) {
     if (
       i !== start && liftedState.skippedActionIds.indexOf(liftedState.stagedActionIds[i]) !== -1
     ) continue; // it's already skipped
-    silently(() => {
-      dispatchRemotely(store, liftedState.actionsById[liftedState.stagedActionIds[i]].action);
-    }, store);
+    dispatch(store, liftedState.actionsById[liftedState.stagedActionIds[i]].action);
     liftedState.computedStates[i].state = mobx.toJS(store);
   }
 
@@ -40,7 +45,7 @@ function toggleAction(store, id, strState) {
 
 export const dispatchMonitorAction = (store, devTools) => {
   const initValue = mobx.toJS(store);
-  devTools.init(initValue);
+  devTools.init(initValue, getMethods(store));
 
   return (message) => {
     if (message.type === 'DISPATCH') {
@@ -62,7 +67,7 @@ export const dispatchMonitorAction = (store, devTools) => {
           return;
       }
     } else if (message.type === 'ACTION') {
-      dispatchRemotely(store, message.payload);
+      dispatchRemotely(devTools, store, message.payload);
     }
   };
 };
