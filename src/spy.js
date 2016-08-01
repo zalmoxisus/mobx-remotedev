@@ -49,9 +49,16 @@ export default function spy(store, config) {
 
   mobx.spy((change) => {
     if (change.spyReportStart) {
-      if (change.type === 'reaction') return; // TODO: show reactions
       objName = getName(change.object || change.target);
-      if (!stores[objName] || stores[objName].__isRemotedevAction) return;
+      if (change.type === 'reaction') {
+        // TODO: show reactions
+        schedule(objName);
+        return;
+      }
+      if (!stores[objName] || stores[objName].__isRemotedevAction) {
+        schedule(objName);
+        return;
+      }
       if (change.type === 'action') {
         const action = createAction(change.name);
         if (change.arguments && change.arguments.length) action.arguments = change.arguments;
@@ -65,7 +72,7 @@ export default function spy(store, config) {
       } else if (change.type && mobx.isObservable(change.object)) {
         schedule(objName, !onlyActions[objName] && createAction(change.type, change));
       }
-    } else if (change.spyReportEnd && stores[objName]) {
+    } else if (change.spyReportEnd) {
       send();
     }
   });
