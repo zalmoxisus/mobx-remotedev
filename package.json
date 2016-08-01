@@ -1,6 +1,6 @@
 {
   "name": "mobx-remotedev",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Remote debugging for mobx.",
   "main": "lib/index.js",
   "files": [
