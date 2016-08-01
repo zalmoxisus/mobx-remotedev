@@ -25,10 +25,10 @@ var todoFactory = function (title) {
 var todoListFactory = function () {
   var todoList = {
     addTodo: mobx.action(function addTodo (todo) {
-      todoList.todos.push(todo);
+      todoList.todos.push(todoFactory(todo));
     }),
     addTodos: mobx.action(function addTodos (todos) {
-      todoList.todos = todoList.todos.concat(todos);
+      todoList.todos = todoList.todos.concat(todos.map(todo => todoFactory(todo)));
     })
   };
 
@@ -83,5 +83,5 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-store.addTodos([todoFactory('Get Coffee'), todoFactory('Write simpler code')]);
+store.addTodos(['Get Coffee', 'Write simpler code']);
 store.todos[0].toggleStatus(true);
