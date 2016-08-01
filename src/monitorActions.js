@@ -75,6 +75,11 @@ export function dispatchMonitorAction(store, devTools, onlyActions) {
       }
     } else if (message.type === 'ACTION') {
       dispatchRemotely(devTools, store, message.payload);
+    } else if (message.type === 'IMPORT') {
+      const liftedState = parse(message.state);
+      const { computedStates } = liftedState;
+      setValue(store, computedStates[computedStates.length - 1].state);
+      devTools.send(null, liftedState);
     }
   };
 }
