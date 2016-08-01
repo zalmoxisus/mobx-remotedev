@@ -43,7 +43,7 @@ function toggleAction(store, id, strState) {
   return liftedState;
 }
 
-export const dispatchMonitorAction = (store, devTools) => {
+export function dispatchMonitorAction(store, devTools, onlyActions) {
   const initValue = mobx.toJS(store);
   devTools.init(initValue, getMethods(store));
 
@@ -63,6 +63,13 @@ export const dispatchMonitorAction = (store, devTools) => {
           setValue(store, parse(message.state));
           return;
         case 'TOGGLE_ACTION':
+          if (!onlyActions) {
+            console.warn(
+              '`onlyActions` parameter should be `true` to skip actions: ' +
+              'https://github.com/zalmoxisus/mobx-remotedev#remotedevstore-config'
+            );
+            return;
+          }
           devTools.send(null, toggleAction(store, message.payload.id, message.state));
           return;
       }
@@ -70,4 +77,4 @@ export const dispatchMonitorAction = (store, devTools) => {
       dispatchRemotely(devTools, store, message.payload);
     }
   };
-};
+}

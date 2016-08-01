@@ -22,7 +22,7 @@ function init(store, config) {
   stores[name] = store;
 
   const devTools = window.devToolsExtension.connect(config);
-  devTools.subscribe(dispatchMonitorAction(store, devTools));
+  devTools.subscribe(dispatchMonitorAction(store, devTools, onlyActions[name]));
   monitors[name] = devTools;
 }
 
