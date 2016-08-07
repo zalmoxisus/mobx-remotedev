@@ -7,12 +7,16 @@ export default function dev(store, config) {
   if (mobx.isObservable(store)) {
     spy(store, config);
   } else if (typeof store === 'function') {
-    store = class extends store {  // eslint-disable-line no-param-reassign
+    /* eslint-disable no-param-reassign */
+    if (!config) config = {};
+    if (!config.name) config.name = store.name;
+    store = class extends store {
       constructor(...args) {
         super(...args);
         spy(this, config);
       }
     };
+    /* eslint-enable */
   } else {
     console.warn(`Passed ${typeof store} to mobx-remotedev, which is not an observable.`);
   }
