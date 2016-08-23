@@ -11,7 +11,11 @@ const getPayload = (change) => {
   };
 };
 
-export function createAction(name, change) {
+export function createAction(objName, objPath, change) {
+  let name;
+  if (objPath) name = `${objPath}.${objName}`;
+  else name = objName;
+
   if (!change) { // is action
     return { type: name };
   }

@@ -10,6 +10,7 @@ const onlyActions = {};
 const filters = {};
 const monitors = {};
 const scheduled = [];
+const children = {};
 
 function configure(name, config = {}) {
   if (typeof config.onlyActions === 'undefined') onlyActions[name] = mobx.useStrict();
@@ -25,6 +26,22 @@ function init(store, config) {
   const devTools = connectViaExtension(config);
   devTools.subscribe(dispatchMonitorAction(store, devTools, onlyActions[name]));
   monitors[name] = devTools;
+}
+
+function track(change) {
+  if (change.type === 'splice') {
+    const path = mobx.extras.getDebugName(change.object).split('.');
+    const parent = path.shift();
+    const { added } = change;
+    if (Array.isArray(added)) {
+      added.forEach((el, i) => {
+        children[mobx.extras.getDebugName(el)] = {
+          parent,
+          path: [...path, i].join('.')
+        };
+      });
+    }
+  }
 }
 
 function schedule(name, action) {
@@ -47,6 +64,7 @@ export default function spy(store, config) {
   if (isSpyEnabled) return;
   isSpyEnabled = true;
   let objName;
+  let objPath;
 
   mobx.spy((change) => {
     if (change.spyReportStart) {
@@ -56,12 +74,16 @@ export default function spy(store, config) {
         schedule(objName);
         return;
       }
+      if (!stores[objName] && children[objName]) {
+        objPath = children[objName].path;
+        objName = children[objName].parent;
+      }
       if (!stores[objName] || stores[objName].__isRemotedevAction) {
         schedule(objName);
         return;
       }
       if (change.type === 'action') {
-        const action = createAction(change.name);
+        const action = createAction(change.name, objPath);
         if (change.arguments && change.arguments.length) action.arguments = change.arguments;
         if (!onlyActions[objName]) {
           schedule(objName, { ...action, type: `┏ ${action.type}` });
@@ -71,7 +93,8 @@ export default function spy(store, config) {
           schedule(objName, action);
         }
       } else if (change.type && mobx.isObservable(change.object)) {
-        schedule(objName, !onlyActions[objName] && createAction(change.type, change));
+        track(change);
+        schedule(objName, !onlyActions[objName] && createAction(change.type, objPath, change));
       }
     } else if (change.spyReportEnd) {
       send();
