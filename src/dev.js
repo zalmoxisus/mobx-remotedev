@@ -2,7 +2,9 @@ import mobx from 'mobx';
 import spy from './spy';
 
 export default function dev(store, config) {
-  if (config && !config.remote && (typeof window === 'undefined' || !window.devToolsExtension)) {
+  if (
+    (!config || !config.remote) && (typeof window === 'undefined' || !window.devToolsExtension)
+  ) {
     return store;
   }
 
