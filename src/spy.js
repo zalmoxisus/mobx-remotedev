@@ -1,4 +1,5 @@
 import mobx from 'mobx';
+import { connectViaExtension } from 'remotedev';
 import { createAction, getName } from './utils';
 import { isFiltered } from './filters';
 import { dispatchMonitorAction } from './monitorActions';
@@ -21,7 +22,7 @@ function init(store, config) {
   configure(name, config);
   stores[name] = store;
 
-  const devTools = window.devToolsExtension.connect(config);
+  const devTools = connectViaExtension(config);
   devTools.subscribe(dispatchMonitorAction(store, devTools, onlyActions[name]));
   monitors[name] = devTools;
 }

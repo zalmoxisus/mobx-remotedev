@@ -1,7 +1,7 @@
 export function isFiltered(action, localFilter) {
   if (
-    !localFilter &&
-    (!window.devToolsOptions.filter || window.devToolsOptions.filter === 'DO_NOT_FILTER')
+    !localFilter && !window.devToolsOptions ||
+    !window.devToolsOptions.filter || window.devToolsOptions.filter === 'DO_NOT_FILTER'
   ) return false;
 
   const { whitelist, blacklist } = localFilter || window.devToolsOptions;
