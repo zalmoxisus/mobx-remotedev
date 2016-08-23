@@ -11,10 +11,10 @@ const filters = {};
 const monitors = {};
 const scheduled = [];
 
-function configure(name, config) {
-  if (!config) return;
-  onlyActions[name] = config.onlyActions;
-  filters[name] = config.filters;
+function configure(name, config = {}) {
+  if (typeof config.onlyActions === 'undefined') onlyActions[name] = mobx.useStrict();
+  else onlyActions[name] = config.onlyActions;
+  if (config.filters) filters[name] = config.filters;
 }
 
 function init(store, config) {
