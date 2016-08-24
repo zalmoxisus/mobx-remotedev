@@ -5,6 +5,7 @@ import { isFiltered } from './filters';
 import { dispatchMonitorAction } from './monitorActions';
 
 let isSpyEnabled = false;
+let fallbackStoreName;
 const stores = {};
 const onlyActions = {};
 const filters = {};
@@ -15,6 +16,10 @@ function configure(name, config = {}) {
   if (typeof config.onlyActions === 'undefined') onlyActions[name] = mobx.useStrict();
   else onlyActions[name] = config.onlyActions;
   if (config.filters) filters[name] = config.filters;
+  if (config.global) {
+    if (fallbackStoreName) throw Error("You've already defined a global store");
+    fallbackStoreName = name;
+  }
 }
 
 function init(store, config) {
@@ -56,7 +61,12 @@ export default function spy(store, config) {
         schedule(objName);
         return;
       }
+      if (!stores[objName]) objName = fallbackStoreName;
       if (!stores[objName] || stores[objName].__isRemotedevAction) {
+        schedule(objName);
+        return;
+      }
+      if (change.fn && change.fn.__isRemotedevAction) {
         schedule(objName);
         return;
       }
