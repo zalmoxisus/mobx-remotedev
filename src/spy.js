@@ -66,6 +66,10 @@ export default function spy(store, config) {
         schedule(objName);
         return;
       }
+      if (change.fn && change.fn.__isRemotedevAction) {
+        schedule(objName);
+        return;
+      }
       if (change.type === 'action') {
         const action = createAction(change.name);
         if (change.arguments && change.arguments.length) action.arguments = change.arguments;

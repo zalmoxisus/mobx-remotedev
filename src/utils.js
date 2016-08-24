@@ -42,7 +42,7 @@ export const silently = (fn, store) => {
   delete store.__isRemotedevAction;
 };
 
-export const setValue = mobx.action('@@remotedev', (store, state) => {
+function setValueAction(store, state)  {
   silently(() => {
     if (store.importState) {
       store.importState(state);
@@ -53,5 +53,7 @@ export const setValue = mobx.action('@@remotedev', (store, state) => {
     }
   }, store);
   return state;
-});
+}
+setValueAction.__isRemotedevAction = true;
+export const setValue = mobx.action('@@remotedev', setValueAction);
 /* eslint-enable */
