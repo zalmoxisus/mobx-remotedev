@@ -54,6 +54,7 @@ See [counter](https://github.com/zalmoxisus/mobx-remotedev/blob/master/examples/
     - **config** *object* (optional as the parameters bellow)
       - **name** *string* - the instance name to be showed on the monitor page. Default value is document.title.
       - **onlyActions** *boolean* - set it to `true` to have a clear log only with actions. If MobX is in strict mode, it is `true` by default. Don't forget about [async actions](https://github.com/zalmoxisus/mobx-remotedev#how-to-handle-async-actions).
+      - **global** *boolean* - set it to `true` in order to assign dispatching of all unhandled actions to this store. Useful for nested classes / observables or when having async actions without specifying the `scope` explicitly. 
       - **shouldStringify** *boolean* - set it to `true` when having circular references or special types like ImmutableJS. By default is `false`.
       - **filters** *object* - map of arrays named `whitelist` or `blacklist` to filter action types. You can also set it globally in the extension settings.
         - **blacklist** *array of (regex as string)* - actions to be hidden in DevTools.
@@ -95,7 +96,11 @@ Check `__isRemotedevAction` of your class or observable object, which will be se
 
 ### How to handle async actions
 
-Use `runInAction` and don't forget about the second / third parameter which will be `this` if you're using arrow functions. [Example](https://github.com/zalmoxisus/mobx-remotedev/blob/master/examples/counter/stores/appState.js#L14)  
+Use `runInAction` and don't forget about the second / third parameter which will be `this` if you're using arrow functions. If you don't want to specify it, set the `global` parameter to `true`. [Example](https://github.com/zalmoxisus/mobx-remotedev/blob/master/examples/counter/stores/appState.js#L14)  
+
+### How to show actions for nested classes / observables
+
+Just set the `global` parameter to `true` like `remotedev(store, { global: true })`. If you want more details about the nested tree, see [#5](https://github.com/zalmoxisus/mobx-remotedev/pull/5).  
 
 ## LICENSE
 
