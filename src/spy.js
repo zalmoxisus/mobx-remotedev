@@ -17,7 +17,7 @@ function configure(name, config = {}) {
   else onlyActions[name] = config.onlyActions;
   if (config.filters) filters[name] = config.filters;
   if (config.global) {
-    if (fallbackStoreName) throw Error("You've already defined a global store");
+    if (fallbackStoreName) throw Error('You\'ve already defined a global store');
     fallbackStoreName = name;
   }
 }

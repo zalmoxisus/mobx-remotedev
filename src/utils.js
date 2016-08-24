@@ -42,7 +42,7 @@ export const silently = (fn, store) => {
   delete store.__isRemotedevAction;
 };
 
-function setValueAction(store, state)  {
+function setValueAction(store, state) {
   silently(() => {
     if (store.importState) {
       store.importState(state);
