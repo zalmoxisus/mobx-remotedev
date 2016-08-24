@@ -19,7 +19,7 @@ var todoFactory = function (title) {
       finished: false
     }
   );
-  return remotedev(todo, { name: `Todo: ${title}` });
+  return todo;
 };
 
 var todoListFactory = function () {
@@ -41,7 +41,7 @@ var todoListFactory = function () {
     }
   });
 
-  return remotedev(todoList, { name: 'Todo list' });
+  return remotedev(todoList, { name: 'Todo list', global: true });
 };
 
 var TodoListView = mobxReact.observer(function TodoListView() {
