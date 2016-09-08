@@ -13,8 +13,11 @@ const monitors = {};
 const scheduled = [];
 
 function configure(name, config = {}) {
-  if (typeof config.onlyActions === 'undefined') onlyActions[name] = mobx.useStrict();
-  else onlyActions[name] = config.onlyActions;
+  if (typeof config.onlyActions === 'undefined') {
+    onlyActions[name] = mobx.isStrictModeEnabled && mobx.isStrictModeEnabled();
+  } else {
+    onlyActions[name] = config.onlyActions
+  }
   if (config.filters) filters[name] = config.filters;
   if (config.global) {
     if (fallbackStoreName) throw Error('You\'ve already defined a global store');

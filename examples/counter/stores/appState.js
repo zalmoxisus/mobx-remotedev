@@ -1,7 +1,7 @@
 import { observable, action, extras, useStrict, runInAction } from 'mobx';
 import remotedev from '../../../src/dev'; // import remotedev from 'mobx-remotedev/lib/dev';
 
-useStrict();
+useStrict(true);
 
 const appState = observable({
   count: 0
