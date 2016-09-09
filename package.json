@@ -58,7 +58,7 @@
     "webpack": "^1.13.1"
   },
   "peerDependencies": {
-    "mobx": "^2.4.1"
+    "mobx": ">=2.3.0"
   },
   "npmName": "mobx-remotedev",
   "npmFileMap": [
