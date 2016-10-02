@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import mobx from 'mobx';
 import mobxReact from 'mobx-react';
-import remotedev from '../../src/dev';
+import remotedev from 'mobx-remotedev/lib/dev';
 
 mobx.useStrict(true);
 var todoFactory = function (title) {
