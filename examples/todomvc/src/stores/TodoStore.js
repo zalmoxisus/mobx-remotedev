@@ -64,4 +64,4 @@ class TodoStore {
 	}
 }
 
-export default remotedev(TodoStore, { global: true, shouldStringify: true });
+export default remotedev(TodoStore, { global: true });
