@@ -45,7 +45,18 @@ class appStore {
 export default remotedev(appStore);
 ```
 
-See [counter](https://github.com/zalmoxisus/mobx-remotedev/blob/master/examples/counter/stores/appState.js) and [todomvc](https://github.com/zalmoxisus/mobx-remotedev/tree/master/examples/todomvc/src/stores) examples.
+Or as ES decorator:
+
+```js
+import remotedev from 'mobx-remotedev';
+
+@remotedev(/*{ config }*/)
+export default class appStore {
+	// ...
+}
+```
+
+See [counter](https://github.com/zalmoxisus/mobx-remotedev/blob/master/examples/counter/stores/appState.js), [simple-todo](https://github.com/zalmoxisus/mobx-remotedev/blob/master/examples/simple-todo/index.js) and [todomvc](https://github.com/zalmoxisus/mobx-remotedev/tree/master/examples/todomvc/src/stores) examples.
 
 ## API
 #### `remotedev(store, [config])`
