@@ -1,7 +1,8 @@
 import mobx from 'mobx';
 import spy from './spy';
+import getDecorator from './getDecorator';
 
-export default function dev(store, config) {
+function dev(store, config) {
   if (
     (!config || !config.remote) && (typeof window === 'undefined' || !window.devToolsExtension)
   ) {
@@ -27,3 +28,5 @@ export default function dev(store, config) {
 
   return store;
 }
+
+export default getDecorator(dev);
