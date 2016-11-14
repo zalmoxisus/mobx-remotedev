@@ -1,6 +1,6 @@
 {
   "name": "mobx-remotedev",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Remote debugging for mobx.",
   "main": "lib/index.js",
   "files": [
@@ -52,7 +52,7 @@
     "eslint-plugin-jsx-a11y": "^1.5.3",
     "eslint-plugin-react": "^5.2.2",
     "expect": "^1.20.1",
-    "mobx": "^2.4.3",
+    "mobx": "^2.5.1",
     "mocha": "^2.5.3",
     "rimraf": "^2.5.2",
     "webpack": "^1.13.1"
