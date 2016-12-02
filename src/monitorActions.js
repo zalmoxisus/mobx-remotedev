@@ -72,14 +72,16 @@ export function dispatchMonitorAction(store, devTools, onlyActions) {
           }
           devTools.send(null, toggleAction(store, message.payload.id, message.state));
           return;
+        case 'IMPORT_STATE': {
+          const { nextLiftedState } = message.payload;
+          const { computedStates } = nextLiftedState;
+          setValue(store, computedStates[computedStates.length - 1].state);
+          devTools.send(null, nextLiftedState);
+          return;
+        }
       }
     } else if (message.type === 'ACTION') {
       dispatchRemotely(devTools, store, message.payload);
-    } else if (message.type === 'IMPORT') {
-      const liftedState = parse(message.state);
-      const { computedStates } = liftedState;
-      setValue(store, computedStates[computedStates.length - 1].state);
-      devTools.send(null, liftedState);
     }
   };
 }
