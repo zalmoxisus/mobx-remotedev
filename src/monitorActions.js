@@ -60,6 +60,7 @@ export function dispatchMonitorAction(store, devTools, onlyActions) {
           devTools.init(setValue(store, parse(message.state)));
           return;
         case 'JUMP_TO_STATE':
+        case 'JUMP_TO_ACTION':
           setValue(store, parse(message.state));
           return;
         case 'TOGGLE_ACTION':
