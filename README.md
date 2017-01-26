@@ -69,7 +69,7 @@ See [counter](https://github.com/zalmoxisus/mobx-remotedev/blob/master/examples/
       - **filters** *object* - map of arrays named `whitelist` or `blacklist` to filter action types. You can also set it globally in the extension settings.
         - **blacklist** *array of (regex as string)* - actions to be hidden in DevTools.
         - **whitelist** *array of (regex as string)* - all other actions will be hidden in DevTools (the `blacklist` parameter will be ignored).
-      - **remote** *boolean* - set it to `true` to have remote monitoring via the local or `remotedev.io` server.
+      - **remote** *boolean* - set it to `true` to have remote monitoring via the local or `remotedev.io` server. `remote: false` is used for [the extension](https://github.com/zalmoxisus/redux-devtools-extension) or [react-native-debugger](https://github.com/jhen0409/react-native-debugger)
       - **hostname** *string* - use to specify host for [`remotedev-server`](https://github.com/zalmoxisus/remotedev-server). If `port` is specified, default value is `localhost`.
       - **port** *number* - use to specify host's port for [`remotedev-server`](https://github.com/zalmoxisus/remotedev-server).
 
