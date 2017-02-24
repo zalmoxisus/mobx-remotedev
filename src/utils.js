@@ -18,7 +18,8 @@ export function createAction(name, change) {
 
   let action;
   if (typeof change.newValue !== 'undefined') {
-    action = { [change.name]: mobx.toJS(change.newValue) };
+    const key = typeof change.index !== 'undefined' ? change.index : change.name;
+    action = { [key]: mobx.toJS(change.newValue) };
   } else {
     action = getPayload(change);
   }
