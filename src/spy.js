@@ -31,7 +31,13 @@ function init(store, config) {
   stores[name] = store;
 
   const devTools = connectViaExtension(config);
-  devTools.subscribe(dispatchMonitorAction(store, devTools, onlyActions[name]));
+  let serializedStore;
+  try {
+    serializedStore = JSON.stringify(store);
+  } catch(jsonStringifyError) {
+    throw new Error('Store strinigy failed. Make sure your store is JSON stringify-able');
+  }
+  devTools.subscribe(dispatchMonitorAction(serializedStore, devTools, onlyActions[name]));
   monitors[name] = devTools;
 }
 
