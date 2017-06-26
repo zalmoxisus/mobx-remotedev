@@ -1,4 +1,4 @@
-import mobx from 'mobx';
+import * as mobx from 'mobx';
 import { stringify, parse } from 'jsan';
 import { getMethods, evalMethod } from 'remotedev-utils';
 import { silently, setValue } from './utils';

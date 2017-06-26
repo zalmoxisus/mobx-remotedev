@@ -1,4 +1,4 @@
-import mobx from 'mobx';
+import * as mobx from 'mobx';
 import { connectViaExtension } from 'remotedev';
 import { createAction, getName } from './utils';
 import { isFiltered } from './filters';

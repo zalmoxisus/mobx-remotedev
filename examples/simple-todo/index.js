@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import mobx from 'mobx';
+import * as mobx from 'mobx';
 import mobxReact from 'mobx-react';
 import remotedev from 'mobx-remotedev/lib/dev';
 

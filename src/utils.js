@@ -1,4 +1,4 @@
-import mobx from 'mobx';
+import * as mobx from 'mobx';
 
 const getPayload = (change) => {
   const { added, addedCount, index, removed, removedCount } = change;

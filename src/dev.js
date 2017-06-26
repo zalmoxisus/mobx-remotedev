@@ -1,4 +1,4 @@
-import mobx from 'mobx';
+import * as mobx from 'mobx';
 import spy from './spy';
 import getDecorator from './getDecorator';
 

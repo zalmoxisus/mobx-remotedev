@@ -1,4 +1,4 @@
-import mobx from 'mobx';
+import * as mobx from 'mobx';
 
 export default function getDecorator(func) {
   return (storeOrConfig, config) => {
