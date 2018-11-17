@@ -26,7 +26,7 @@ function configure(name, config = {}) {
 }
 
 function init(store, config) {
-  const name = mobx.extras.getDebugName(store);
+  const name = mobx.getDebugName(store);
   configure(name, config);
   stores[name] = store;
 
