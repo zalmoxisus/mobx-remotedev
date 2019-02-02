@@ -1,5 +1,5 @@
 /**
- * Observer
+ * Wrapper/Decorator for Mobx stores
  */
 export default function<T>(store: T, config: RemoteDevConfig): T;
 
