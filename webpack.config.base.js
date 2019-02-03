@@ -5,15 +5,16 @@ module.exports = {
     mobx: 'mobx'
   },
   module: {
-    loaders: [
+    rules: [
       { test: /\.js$/, loaders: ['babel-loader'], exclude: /node_modules/ }
     ]
   },
+  entry: './src/index.js',
   output: {
     library: 'RemoteDev',
     libraryTarget: 'umd'
   },
   resolve: {
-    extensions: ['', '.js']
+    extensions: ['.js']
   }
 };

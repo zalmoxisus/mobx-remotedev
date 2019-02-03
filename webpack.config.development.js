@@ -2,13 +2,18 @@
 
 var webpack = require('webpack');
 var baseConfig = require('./webpack.config.base');
+var merge = require('webpack-merge');
 
-var config = Object.create(baseConfig);
-config.plugins = [
-  new webpack.optimize.OccurenceOrderPlugin(),
-  new webpack.DefinePlugin({
-    'process.env.NODE_ENV': JSON.stringify('development')
-  })
-];
+var devConfig = {
+  mode: 'development',
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('development')
+    })
+  ],
+  output: {
+    filename: 'mobx-remotedev.js'
+  }
+};
 
-module.exports = config;
+module.exports = merge(baseConfig, devConfig);
