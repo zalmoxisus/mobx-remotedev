@@ -1,5 +1,13 @@
 /**
- * Wrapper/Decorator for Mobx stores
+ * Decorator for Mobx stores
+ */
+
+export default function<T>(
+  config?: RemoteDevConfig
+): (component: any, config?: RemoteDevConfig) => void;
+
+/**
+ * Wrapper for Mobx stores
  */
 export default function<T>(store: T, config?: RemoteDevConfig): T;
 
