@@ -1,4 +1,4 @@
-import getDecorator from './getDecorator';
+const getDecorator = require('./getDecorator').default;
 
 if (process.env.NODE_ENV === 'development') {
   module.exports = require('./dev').default; // eslint-disable-line global-require
