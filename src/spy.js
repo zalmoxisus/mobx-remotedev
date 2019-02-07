@@ -14,7 +14,7 @@ const scheduled = [];
 
 function configure(name, config = {}) {
   if (typeof config.onlyActions === 'undefined') {
-    onlyActions[name] = mobx.isStrictModeEnabled && mobx.isStrictModeEnabled();
+    onlyActions[name] = mobx._getGlobalState && mobx._getGlobalState().enforceActions;
   } else {
     onlyActions[name] = config.onlyActions;
   }
