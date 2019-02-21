@@ -20,8 +20,7 @@ function configure(name, config = {}) {
   }
   if (config.filters) filters[name] = config.filters;
   if (config.global) {
-    if (fallbackStoreName) throw Error('You\'ve already defined a global store');
-    fallbackStoreName = name;
+    fallbackStoreName = fallbackStoreName || name
   }
 }
 
