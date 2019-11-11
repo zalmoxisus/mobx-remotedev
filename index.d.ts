@@ -2,14 +2,14 @@
  * Decorator for Mobx stores
  */
 
-export default function<T>(
+export default function remotedev<T>(
   config?: RemoteDevConfig
 ): (component: any, config?: RemoteDevConfig) => void;
 
 /**
  * Wrapper for Mobx stores
  */
-export default function<T>(store: T, config?: RemoteDevConfig): T;
+export default function remotedev<T>(store: T, config?: RemoteDevConfig): T;
 
 /**
  * Config object for remotedev function argument
