@@ -37,7 +37,7 @@
     "css-loader": "^0.23.1",
     "eslint-plugin-react": "^3.16.1",
     "file-loader": "^0.8.5",
-    "jquery": "^2.2.0",
+    "jquery": "^3.5.0",
     "react-hot-loader": "^2.0.0-alpha-4",
     "style-loader": "^0.13.0",
     "webpack": "^1.9.6",
